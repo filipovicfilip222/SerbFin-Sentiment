@@ -1,0 +1,69 @@
+﻿Total records: 1621
+
+Word-count distribution:
+    1:    2  ##
+    2:    3  ###
+    3:    3  ###
+    4:    2  ##
+    5:    6  ######
+    6:   17  #################
+    7:   45  ########################################
+    8:   97  ########################################
+    9:  148  ########################################
+   10:  202  ########################################
+   11:  260  ########################################
+   12:  262  ########################################
+   13:  194  ########################################
+   14:  171  ########################################
+   15:   90  ########################################
+   16:   53  ########################################
+   17:   26  ##########################
+   18:   15  ###############
+   19:    4  ####
+   20:    8  ########
+   21:    5  #####
+   22:    2  ##
+   23:    3  ###
+   24:    1  #
+   25:    1  #
+   26:    1  #
+
+Short (<5 words): 10
+  'Termoinženjering'
+  'Sabiana Energy Smart'
+  'RBTT Consultants'
+  'Smart Energy Investment'
+  'Vaillant'
+  'ENERGY NET'
+  'JAF Srbija'
+  'Modularni kiosk koncept Kocka'
+  'Mladi sa Rajačkih pivnica'
+  'Najnovije | Biznis.rs'
+
+Long (>30 words): 0
+
+With site-name suffix: 1450
+  'Srbija se zadužila za tri milijarde evra za vraćanje dugova i pokrivanje deficita | Biznis.rs'
+  'Slovenija izdala sedmogodišnje obveznice u vrednosti od 350 miliona evra | Biznis.rs'
+  'Može li Raiffeisen do Addika po diskontnoj ceni ili je realnije da obe ponude propadnu? | Biznis.rs'
+  'Austrijska kompanija Feller otvorila fabriku kablova u Subotici i najavila dalje širenje | Biznis.rs'
+  'Alpac Capital kupuje N1, Novu i Radar - postignut sporazum sa United Group | Biznis.rs'
+  'Produžen rok za kupovinu imovine kompanije Lukoil | Biznis.rs'
+  'Michelin ukida devet odsto radnih mesta u Francuskoj | Biznis.rs'
+  'Anthropic po tržišnoj vrednosti pretekao rivala OpenAI | Biznis.rs'
+  'Crna Gora i Francuska potpisuju memorandum za gradnju 24 kilometra auto-puta | Biznis.rs'
+  'Kazne za trgovce do 12 miliona dinara ako krše pravila ugovaranja kredita na daljinu | Biznis.rs'
+
+Junk-pattern matches: 5
+  'Merc obećao da će njegova vlada odlučno nastaviti reforme | Biznis.rs'
+  'EPS: Teške rudarske mašine prešle preko korita reke Kolubare kako bi se nastavila proizvodnja uglja '
+  'Kocijančić: Očekujemo da Srbija nastavi put ka EU - Nova Ekonomija'
+  'Davenport: Važno je da buduća vlada Srbije nastavi reforme - Nova Ekonomija'
+  'Rusija će nastaviti da prodaje oružje i Azerbejdžanu i Jermeniji - Nova Ekonomija'
+
+Near-duplicate prefixes (first 50 chars, count>1): 5
+  2x  'proizvođači mleka u srbiji: otkupne cene padaju, a'
+  2x  'investicije u naftne projekte u padu treću godinu'
+  2x  'udruženje oie srbija podnelo inicijativu za izmenu'
+  2x  'nemačka i kanada postigle dogovor o izvozu tečnog'
+  2x  'francuzima krak jadransko-jonskog autoputa: vlada'

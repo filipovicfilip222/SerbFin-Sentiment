@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "serbfin-sentiment"
+version = "0.1.0"
+description = "Serbian financial sentiment classification — QLoRA fine-tuned Llama 3.2 3B"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "torch",
+    "transformers>=4.45",
+    "trl>=0.16",          # SFTConfig + processing_class API (not TrainingArguments/tokenizer=)
+    "peft>=0.13",
+    "bitsandbytes>=0.44",
+    "accelerate>=1.0",
+    "datasets>=3.0",
+    "evaluate",
+    "scikit-learn",
+    "huggingface_hub",
+    "anthropic",          # silver labeling via Claude Haiku
+    "pydantic>=2.0",
+    "python-dotenv",
+    "tenacity",           # retry / rate-limit handling
+    "tqdm",
+    # Phase 1 — collection
+    "feedparser",       # RSS/Atom parsing
+    "selectolax",       # fast HTML parsing for fallback scraper
+    "requests",
+    "pyyaml",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "ruff",
+    "ipykernel",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"

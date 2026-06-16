@@ -1,0 +1,151 @@
+# SerbFin-Sentiment -source configuration
+# All feed URLs were verified 2026-05-31.  Re-verify if a source starts returning 0 items.
+#
+# type: rss     ->uses src/collect/rss.py     (preferred -deterministic, no scraping)
+# type: html    ->uses src/collect/html.py    (fallback -polite, robots.txt-aware)
+# type: sitemap ->uses src/collect/sitemap.py (bulk historical -- run once with --sitemap)
+#
+# Workflow:
+#   First time: python -m src.collect.run --sitemap        (bulk historical harvest)
+#   Daily:      python -m src.collect.run                  (RSS/HTML top-ups)
+#
+# To add a new source: copy any entry, set enabled: true, verify the URL manually first.
+
+global:
+  output: data/raw/headlines.jsonl
+  request_delay: 2.0          # seconds between requests to the same domain
+
+sources:
+
+  # ── RSS feeds (verified working) ────────────────────────────────────────────
+
+  - name: Biznis.rs
+    type: rss
+    feed_url: "https://biznis.rs/feed/"
+    enabled: true
+    # ~20 items per fetch; run daily to accumulate
+
+  - name: B92 Biz
+    type: rss
+    feed_url: "https://www.b92.net/rss/biz"
+    enabled: true
+    # 20 items; business / economic news
+
+  - name: Nova Ekonomija
+    type: rss
+    feed_url: "https://novaekonomija.rs/feed/"
+    enabled: true
+    # 20 items; macroeconomic and energy focus
+
+  # ── HTML fallback scrapers (listing pages only) ──────────────────────────────
+
+  - name: eKapija Finansije
+    type: html
+    list_url: "https://www.ekapija.com/news/finansije"
+    headline_selector: "a[href*='/news/']"
+    href_pattern: "/news/\\d+"        # keep only numeric-ID article links
+    base_url: "https://www.ekapija.com"
+    pages: 30
+    pagination: "page={page}"         # appended as ?page=N (verified working)
+    enabled: true
+    # ~20 items/page × 30 pages ≈ 600 headlines; dates extracted from DD.MM.YYYY. text
+
+  - name: eKapija Energija
+    type: html
+    list_url: "https://www.ekapija.com/news/energija"
+    headline_selector: "a[href*='/news/']"
+    href_pattern: "/news/\\d+"
+    base_url: "https://www.ekapija.com"
+    pages: 5
+    pagination: "page={page}"
+    enabled: true
+
+  - name: eKapija Industrija
+    type: html
+    list_url: "https://www.ekapija.com/news/industrija"
+    headline_selector: "a[href*='/news/']"
+    href_pattern: "/news/\\d+"
+    base_url: "https://www.ekapija.com"
+    pages: 5
+    pagination: "page={page}"
+    enabled: true
+
+  - name: Kamatica
+    type: html
+    list_url: "https://www.kamatica.com/vesti/"
+    headline_selector: "h4 a"
+    href_pattern: "/vest/"
+    base_url: "https://www.kamatica.com"
+    pages: 1
+    enabled: false
+    note: "robots.txt disallows /vesti/ -- check kamatica.com/robots.txt before re-enabling"
+
+  - name: BGDX Izdavaoci
+    type: html
+    list_url: "https://bgdx.rs/trzista_i_hartije/vesti/izdavaoci"
+    headline_selector: "a[href*='/vesti/']"
+    href_pattern: "/vesti/\\d+"
+    base_url: "https://bgdx.rs"
+    pages: 10
+    pagination: "stranica={page}"   # bgdx.rs uses Serbian param name ("stranica" = page)
+    enabled: true
+    # robots.txt (2026-06-02): content-signals policy only, no traditional Disallow rules.
+    # ai-train signal present; accepted for this research project (headlines only, no full text).
+
+  # ── Sitemap sources (run once with --sitemap for bulk historical harvest) ────
+  # Both verified 2026-05-31.
+  # Biznis.rs: news-sitemap.xml has Google News titles (free, ~50 recent items).
+  #            post-sitemap*.xml have historical posts, og:title fetch needed.
+  # Nova Ekonomija: post-sitemap*.xml only, og:title fetch needed.
+  # robots.txt for both: only /wp-admin/ disallowed; article pages allowed.
+
+  - name: Biznis.rs
+    type: sitemap
+    sitemap_url: "https://biznis.rs/news-sitemap.xml"
+    sitemap_child_pattern: ""     # direct single sitemap, not an index
+    max_child_sitemaps: 1
+    max_fetch: 0                  # all titles free via news:title
+    enabled: true
+
+  - name: Biznis.rs
+    type: sitemap
+    sitemap_url: "https://biznis.rs/sitemap.xml"
+    sitemap_child_pattern: "post-sitemap"
+    max_child_sitemaps: 8         # 8 newest post-sitemaps x ~500 entries = ~4000 URLs
+    max_fetch: 500                # fetch 500 article pages for og:title
+    enabled: false
+    # Disabled: post-sitemaps pull all categories (politics, culture, sports) →
+    # ~58% of silver labels were irrelevant. Fix the source, not the labeler.
+
+  - name: Nova Ekonomija
+    type: sitemap
+    sitemap_url: "https://novaekonomija.rs/sitemaps.xml"
+    sitemap_child_pattern: "post-sitemap"
+    max_child_sitemaps: 8         # 8 newest x ~500 entries = ~4000 URLs
+    max_fetch: 500                # fetch 500 article pages for og:title
+    enabled: false
+    # Disabled: same reason as Biznis.rs post-sitemaps above.
+
+  # ── Disabled -blocked or unverified ────────────────────────────────────────
+
+  - name: Blic Biznis
+    type: rss
+    feed_url: "https://www.blic.rs/rss/biznis"
+    enabled: false
+    note: "Blocked (Cloudflare) -try from a Serbian IP or browser-based tool"
+
+  - name: Politika Ekonomija
+    type: rss
+    feed_url: "https://www.politika.rs/rss/rss.xml"
+    enabled: false
+    note: "Returns 403 Forbidden -try browsing politika.rs manually for feed URL"
+
+  - name: NBS Vesti
+    type: html
+    list_url: "https://www.nbs.rs/sr_Latn/aktuelnosti/vesti/"
+    headline_selector: ".list-item a, h3 a, h4 a"
+    href_pattern: ""
+    base_url: "https://www.nbs.rs"
+    pages: 3
+    enabled: false
+    note: "URL returned 404 in automated checks -browse nbs.rs to find the news listing URL and update list_url"

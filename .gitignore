@@ -1,0 +1,40 @@
+# --- Secrets (NEVER commit) ---
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+secrets.*
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# --- Project outputs / scratch ---
+outputs/
+notebooks/*.ipynb
+
+# --- Lock / state files ---
+*.lock
+.claude/
+
+# --- Stale/aux git dir from init recovery (Windows can delete this) ---
+.git.broken/
+
+# --- Data: raw + interim are gitignored; commit processed splits only ---
+data/raw/
+data/interim/
+data/processed/*.partial.jsonl
+data/processed/*.tmp
+
+# --- Large model artifacts ---
+*.bin
+*.safetensors
+*.pt
+*.ckpt

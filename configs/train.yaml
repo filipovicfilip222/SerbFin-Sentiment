@@ -1,0 +1,21 @@
+output_dir: outputs/serbfin-llama-3.2-3b
+num_train_epochs: 3
+per_device_train_batch_size: 8
+gradient_accumulation_steps: 2
+learning_rate: 2.0e-4
+lr_scheduler_type: cosine
+warmup_ratio: 0.03
+optim: paged_adamw_8bit
+bf16: true
+gradient_checkpointing: true
+max_length: 512        # headlines are short — well within budget
+logging_steps: 10
+eval_strategy: steps
+eval_steps: 50
+save_strategy: steps
+save_steps: 50
+load_best_model_at_end: true
+metric_for_best_model: eval_loss
+seed: 42
+completion_only_loss: true   # loss on the label token only — NOT the prompt
+report_to: none              # set to "wandb" to enable W&B logging
