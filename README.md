@@ -8,6 +8,9 @@ classification (`positive` / `negative` / `neutral`) on short Serbian financial 
 > Substantially outperforms zero-shot baselines and translation-based FinBERT on a held-out,
 > human-labeled test set.
 
+**[Model on HF Hub](https://huggingface.co/filipovicfilip222/serbfin-sentiment-llama-3.2-3b)** ·
+**[Dataset on HF Hub](https://huggingface.co/datasets/filipovicfilip222/serbfin-sentiment)**
+
 ## Task
 
 Investor-perspective financial sentiment — not emotional sentiment. "Company cuts 5,000 jobs
@@ -41,7 +44,7 @@ notebooks/        scratch only — no production logic
 | 2 — Label | done (240 human-labeled gold test set + silver train pool) |
 | 3 — Train | done — QLoRA adapter trained on RunPod (RTX A5000), 3 epochs, ~84s |
 | 4 — Eval | **done — success criterion met** (fine-tuned beats both baselines) |
-| 5 — Publish | pending |
+| 5 — Publish | done — [dataset](https://huggingface.co/datasets/filipovicfilip222/serbfin-sentiment) + [model](https://huggingface.co/filipovicfilip222/serbfin-sentiment-llama-3.2-3b) on HF Hub |
 | 6 — Writeup | pending |
 
 ### Results (Phase 4) — SUCCESS
@@ -55,8 +58,9 @@ All three scored on the same 240-headline human-labeled gold test set:
 | **Fine-tuned QLoRA adapter** | **0.7379** | 0.7333 | 0.00% |
 
 Fine-tuned macro-F1 (0.7379) beats both required baselines (SPEC.md §8 success criterion). Full
-per-class breakdown and confusion matrices in `reports/eval.md`. Adapter weights in
-`outputs/serbfin-llama-3.2-3b/final_adapter/` (gitignored — not yet published, see Phase 5).
+per-class breakdown and confusion matrices in `reports/eval.md`. Adapter weights published at
+[filipovicfilip222/serbfin-sentiment-llama-3.2-3b](https://huggingface.co/filipovicfilip222/serbfin-sentiment-llama-3.2-3b)
+(local copy in `outputs/serbfin-llama-3.2-3b/final_adapter/` is gitignored, GitHub only carries code).
 
 ## Quick start
 
@@ -96,6 +100,18 @@ rate). Re-running any one script only replaces its own section in the report —
 are left untouched. (Caution: if you copy `reports/` wholesale from a different machine, e.g.
 a rented GPU pod that only ran one script, you'll overwrite the merged file with a partial one.
 Prefer copying just the specific `predictions_*.jsonl` you produced there and re-merge locally.)
+
+## Publish
+
+```bash
+# Requires HF_TOKEN in .env with WRITE access (a "Read"-only token will 403):
+python -m src.publish.push_dataset
+python -m src.publish.push_model
+```
+
+Both are CPU-only (no GPU needed) -- they read local files and upload. `push_model` writes a
+generated model card straight into `outputs/serbfin-llama-3.2-3b/final_adapter/README.md` before
+uploading, pulling the eval summary table live from `reports/eval.md`.
 
 ## License
 
