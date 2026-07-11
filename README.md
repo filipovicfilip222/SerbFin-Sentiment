@@ -37,12 +37,26 @@ notebooks/        scratch only — no production logic
 | Phase | Status |
 |-------|--------|
 | 0 — Setup | done |
-| 1 — Collect | in progress |
-| 2 — Label | pending |
-| 3 — Train | pending |
-| 4 — Eval | pending |
+| 1 — Collect | done |
+| 2 — Label | done (240 human-labeled gold test set + silver train pool) |
+| 3 — Train | done — QLoRA adapter trained on RunPod (RTX A5000), 3 epochs, ~84s |
+| 4 — Eval | **done — success criterion met** (fine-tuned beats both baselines) |
 | 5 — Publish | pending |
 | 6 — Writeup | pending |
+
+### Results (Phase 4) — SUCCESS
+
+All three scored on the same 240-headline human-labeled gold test set:
+
+| Model | macro-F1 | accuracy | malformed rate |
+|---|---|---|---|
+| Zero-shot Llama 3.2 3B | 0.6389 | 0.6417 | 0.00% |
+| Translate (sr→en) + FinBERT | 0.5434 | 0.5417 | 0.00% |
+| **Fine-tuned QLoRA adapter** | **0.7379** | 0.7333 | 0.00% |
+
+Fine-tuned macro-F1 (0.7379) beats both required baselines (SPEC.md §8 success criterion). Full
+per-class breakdown and confusion matrices in `reports/eval.md`. Adapter weights in
+`outputs/serbfin-llama-3.2-3b/final_adapter/` (gitignored — not yet published, see Phase 5).
 
 ## Quick start
 
@@ -63,10 +77,25 @@ python -m src.data.split --input data/interim/silver.jsonl --output-dir data/pro
 ## Reproduction
 
 ```bash
-# After Phase 2 (gold test set hand-labeled):
-python src/train/qlora_train.py
-python src/eval/run_eval.py --split test
+# Baselines, scored against the same gold data/processed/test.jsonl
+# (needs a GPU + HF_TOKEN with access to meta-llama/Llama-3.2-3B-Instruct for the first one):
+python -m src.eval.zero_shot_llama
+python -m src.eval.finbert_baseline
+
+# Fine-tuning (needs a CUDA GPU -- bitsandbytes 4-bit has no CPU/AMD path):
+python -m src.data.split --train-val-only --stats
+python -m src.train.qlora_train
+
+# Eval the fine-tuned adapter against the same gold set + baselines:
+python -m src.eval.finetuned_eval
 ```
+
+All eval scripts write to `reports/predictions_*.jsonl` and merge their scores into
+`reports/eval.md` (macro-F1, per-class precision/recall/F1, confusion matrix, malformed-output
+rate). Re-running any one script only replaces its own section in the report — the other two
+are left untouched. (Caution: if you copy `reports/` wholesale from a different machine, e.g.
+a rented GPU pod that only ran one script, you'll overwrite the merged file with a partial one.
+Prefer copying just the specific `predictions_*.jsonl` you produced there and re-merge locally.)
 
 ## License
 

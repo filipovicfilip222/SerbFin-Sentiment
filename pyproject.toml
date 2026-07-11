@@ -1,6 +1,6 @@
 [build-system]
 requires = ["setuptools>=68", "wheel"]
-build-backend = "setuptools.backends.legacy:build"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "serbfin-sentiment"
@@ -29,6 +29,9 @@ dependencies = [
     "selectolax",       # fast HTML parsing for fallback scraper
     "requests",
     "pyyaml",
+    # Phase 4 — eval baselines
+    "sentencepiece",     # tokenizer backend for MarianMT (opus-mt-tc-big-zls-en)
+    "sacremoses",        # some Marian checkpoints need this at load time
 ]
 
 [project.optional-dependencies]
