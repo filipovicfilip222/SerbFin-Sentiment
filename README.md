@@ -51,13 +51,13 @@ notebooks/        scratch only — no production logic
 
 All three scored on the same 240-headline test set, manually labeled by me:
 
-| Model | macro-F1 | accuracy | malformed rate |
-|---|---|---|---|
-| Zero-shot Llama 3.2 3B | 0.6389 | 0.6417 | 0.00% |
-| Translate (sr→en) + FinBERT | 0.5434 | 0.5417 | 0.00% |
-| **Fine-tuned QLoRA adapter** | **0.7379** | 0.7333 | 0.00% |
+| Model | n | macro-F1 | accuracy | malformed rate |
+|---|---|---|---|---|
+| Zero-shot Llama 3.2 3B | 240 | 0.6389 | 0.6417 | 0.00% |
+| Translate (sr→en) + FinBERT | 240 | 0.5434 | 0.5417 | 0.00% |
+| **Fine-tuned QLoRA adapter** | 240 | **0.7379** | 0.7333 | 0.00% |
 
-Fine-tuned macro-F1 (0.7379) beats both required baselines (SPEC.md §8 success criterion). Full
+Fine-tuned macro-F1 (0.7379, n = 240) beats both required baselines (SPEC.md §8 success criterion). Full
 per-class breakdown and confusion matrices in `reports/eval.md`. Adapter weights published at
 [filipovicfilip222/serbfin-sentiment-llama-3.2-3b](https://huggingface.co/filipovicfilip222/serbfin-sentiment-llama-3.2-3b)
 (local copy in `outputs/serbfin-llama-3.2-3b/final_adapter/` is gitignored, GitHub only carries code).

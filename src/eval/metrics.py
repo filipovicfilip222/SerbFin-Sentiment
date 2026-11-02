@@ -26,6 +26,7 @@ combined report with an up-to-date summary table.
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -171,18 +172,20 @@ def render_section_md(section: ReportSection) -> str:
     return "\n".join(parts)
 
 
-def _parse_existing_sections(path: Path) -> dict[str, tuple[float, float, str]]:
+def _parse_existing_sections(path: Path) -> dict[str, tuple[int, float, float, float, str]]:
     """
     Read a previously-written eval.md and recover, per section name:
-    (macro_f1, malformed_rate, rendered_body).
+    (n, macro_f1, accuracy, malformed_rate, rendered_body).
 
     Each section is stored with a leading `<!-- summary: f1=.. malformed=.. -->`
     comment specifically so this round-trip doesn't need to re-parse tables.
+    n and accuracy come from the section's own "- n = .." / "- accuracy = .."
+    lines (see render_section_md), so older reports still parse.
     """
     if not path.exists():
         return {}
     text = path.read_text(encoding="utf-8")
-    out: dict[str, tuple[float, float, str]] = {}
+    out: dict[str, tuple[int, float, float, float, str]] = {}
     blocks = text.split("\n<!-- summary:")
     for block in blocks[1:]:
         comment_end = block.find("-->")
@@ -194,10 +197,12 @@ def _parse_existing_sections(path: Path) -> dict[str, tuple[float, float, str]]:
             f1_str, mal_str = payload.split(" ")
             f1v = float(f1_str.split("=")[1])
             malv = float(mal_str.split("=")[1])
+            n = int(re.search(r"^- n = (\d+)$", body, re.MULTILINE).group(1))
+            accv = float(re.search(r"^- accuracy = ([0-9.]+)$", body, re.MULTILINE).group(1))
         except Exception:
             continue
         name = body.split("\n", 1)[0].lstrip("#").strip()
-        out[name] = (f1v, malv, body.rstrip())
+        out[name] = (n, f1v, accv, malv, body.rstrip())
     return out
 
 
@@ -213,9 +218,9 @@ def write_report(
     """
     path.parent.mkdir(parents=True, exist_ok=True)
 
-    merged: dict[str, tuple[float, float, str]] = _parse_existing_sections(path)
+    merged: dict[str, tuple[int, float, float, float, str]] = _parse_existing_sections(path)
     for s in sections:
-        merged[s.name] = (s.macro_f1, s.malformed_rate, render_section_md(s))
+        merged[s.name] = (s.n, s.macro_f1, s.accuracy, s.malformed_rate, render_section_md(s))
 
     ordered_names = [n for n in NAME_ORDER if n in merged] + [
         n for n in merged if n not in NAME_ORDER
@@ -230,16 +235,16 @@ def write_report(
         "",
         "## Summary",
         "",
-        "| model | macro-F1 | malformed rate |",
-        "|---|---|---|",
+        "| model | n | macro-F1 | accuracy | malformed rate |",
+        "|---|---|---|---|---|",
     ]
     for name in ordered_names:
-        f1v, malv, _ = merged[name]
-        lines.append(f"| {name} | {f1v:.4f} | {malv:.2%} |")
+        n, f1v, accv, malv, _ = merged[name]
+        lines.append(f"| {name} | {n} | {f1v:.4f} | {accv:.4f} | {malv:.2%} |")
     lines.append("")
 
     for name in ordered_names:
-        f1v, malv, body = merged[name]
+        _, f1v, _, malv, body = merged[name]
         lines.append(f"<!-- summary: f1={f1v:.4f} malformed={malv:.4f} -->")
         lines.append(body)
         lines.append("")
