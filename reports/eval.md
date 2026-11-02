@@ -1,6 +1,6 @@
 # SerbFin-Sentiment — Evaluation
 
-Gold test set: `data/processed/test.jsonl` (240 human-labeled headlines).
+Test set: `data/processed/test.jsonl` (240 headlines, manually labeled by me).
 
 Success criterion (SPEC.md §8): fine-tuned macro-F1 beats BOTH baselines.
 

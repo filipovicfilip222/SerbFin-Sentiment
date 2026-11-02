@@ -5,8 +5,8 @@
 Fine-tuned Llama 3.2 3B Instruct via QLoRA (4-bit NF4) for 3-class financial sentiment
 classification (`positive` / `negative` / `neutral`) on short Serbian financial headlines.
 
-> Substantially outperforms zero-shot baselines and translation-based FinBERT on a held-out,
-> human-labeled test set.
+> Beats a zero-shot Llama 3.2 3B baseline (macro-F1 0.7379 vs 0.6389) and a translate + FinBERT
+> baseline (0.5434) on a 240-headline held-out test set, manually labeled by me.
 
 **[Model on HF Hub](https://huggingface.co/filipovicfilip222/serbfin-sentiment-llama-3.2-3b)** ·
 **[Dataset on HF Hub](https://huggingface.co/datasets/filipovicfilip222/serbfin-sentiment)**
@@ -49,7 +49,7 @@ notebooks/        scratch only — no production logic
 
 ### Results (Phase 4) — SUCCESS
 
-All three scored on the same 240-headline human-labeled gold test set:
+All three scored on the same 240-headline test set, manually labeled by me:
 
 | Model | macro-F1 | accuracy | malformed rate |
 |---|---|---|---|
@@ -81,7 +81,7 @@ python -m src.data.split --input data/interim/silver.jsonl --output-dir data/pro
 ## Reproduction
 
 ```bash
-# Baselines, scored against the same gold data/processed/test.jsonl
+# Baselines, scored against the same manually labeled data/processed/test.jsonl
 # (needs a GPU + HF_TOKEN with access to meta-llama/Llama-3.2-3B-Instruct for the first one):
 python -m src.eval.zero_shot_llama
 python -m src.eval.finbert_baseline
@@ -90,7 +90,7 @@ python -m src.eval.finbert_baseline
 python -m src.data.split --train-val-only --stats
 python -m src.train.qlora_train
 
-# Eval the fine-tuned adapter against the same gold set + baselines:
+# Eval the fine-tuned adapter against the same test set + baselines:
 python -m src.eval.finetuned_eval
 ```
 

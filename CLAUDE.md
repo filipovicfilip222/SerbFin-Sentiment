@@ -17,7 +17,7 @@ NOT emotional) on short Serbian financial headlines.
 - Headline metric = macro-F1, not accuracy.
 - Production logic in src/, not notebooks. Pin deps.
 
-## Required baselines (same gold test set)
+## Required baselines (same manually labeled test set)
 1. Zero-shot Llama 3.2 3B (same prompt).
 2. Translation (sr->en) -> ProsusAI/finbert.
 
@@ -29,4 +29,4 @@ reports/ notebooks/
 GitHub repo · HF dataset repo (+card) · HF model repo (adapter +card) · reports/eval.md
 
 ## Definition of done (per phase) — see SPEC.md §8 table.
-Success = fine-tuned macro-F1 beats BOTH required baselines on the gold test set.
+Success = fine-tuned macro-F1 beats BOTH required baselines on the manually labeled test set.

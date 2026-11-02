@@ -67,7 +67,7 @@ emotional sentiment).
 
 ## Results
 
-Evaluated on a 240-headline **human-labeled** gold test set (never used for training), same
+Evaluated on a 240-headline test set **manually labeled by me** (never used for training), same
 fixed prompt at zero-shot baseline / training / eval time. Full per-class breakdown and
 confusion matrices: `reports/eval.md` in the
 [GitHub repo](https://github.com/filipovicfilip222-alt/SerbFin-Sentiment).
@@ -81,7 +81,7 @@ translate-to-English + [ProsusAI/finbert](https://huggingface.co/ProsusAI/finber
 
 [{dataset_owner}/serbfin-sentiment](https://huggingface.co/datasets/{dataset_owner}/serbfin-sentiment) --
 `train` + `validation` splits (silver-labeled by Claude Haiku). The `test` split used for the
-numbers above is human-gold-labeled and was never seen during training.
+numbers above was manually labeled by me and was never seen during training.
 
 ## Hyperparameters
 

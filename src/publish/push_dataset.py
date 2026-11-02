@@ -99,11 +99,11 @@ article text is redistributed**, per each site's terms of use.
 
 ## Labeling
 
-Three-stage weak-supervision -> human-gold pipeline (SPEC.md §4.4):
+Two-stage labeling pipeline (SPEC.md §4.4):
 
 1. **Silver labels** -- Claude Haiku pre-labels the train pool (`label_source: "llm-silver"`).
-2. **Gold test set** -- 240 headlines, stratified sample, hand-labeled from scratch by a human
-   annotator (`label_source: "human"`), **never** auto-labeled. The silver hint was hidden from
+2. **Test set** -- 240 headlines, stratified sample, manually labeled by me
+   (`label_source: "human"`), **never** auto-labeled. The silver hint was hidden from
    the annotator until after each label was chosen (see `data/ANNOTATION.md` in the GitHub repo
    for full guidelines and the labeling tool used).
 
@@ -125,7 +125,7 @@ Three-stage weak-supervision -> human-gold pipeline (SPEC.md §4.4):
 |---|---|---|
 | train | {len(train)} | llm-silver |
 | validation | {len(val)} | llm-silver |
-| test | {len(test)} | **human** (gold) |
+| test | {len(test)} | **human** (manually labeled by me) |
 
 ### Class balance
 
@@ -135,7 +135,7 @@ Three-stage weak-supervision -> human-gold pipeline (SPEC.md §4.4):
 **validation**
 {balance_table(val)}
 
-**test (gold)**
+**test**
 {balance_table(test)}
 
 Financial news skews `neutral`; no oversampling was applied to val/test (only ever appropriate
@@ -143,8 +143,8 @@ for train, and not used here).
 
 ## Inter-annotator agreement
 
-Not computed for this release -- the gold test set was single-annotated. A second annotation
-pass (Cohen's kappa >= 0.6 target per SPEC.md §4.3) is left as future work.
+Not computed for this release -- the test set was labeled by a single annotator (me). A second
+annotation pass (Cohen's kappa >= 0.6 target per SPEC.md §4.3) is left as future work.
 
 ## License
 
@@ -188,12 +188,12 @@ def main() -> None:
     test = load_jsonl(args.test)
     print(f"train={len(train)}  val={len(val)}  test={len(test)}")
 
-    # Gold test set must be human-labeled -- refuse to publish otherwise (SPEC.md §4.4).
+    # Test set must be manually labeled -- refuse to publish otherwise (SPEC.md §4.4).
     non_human = [r for r in test if r.get("label_source") != "human"]
     if non_human:
         raise SystemExit(
             f"{len(non_human)} test records are not label_source='human'. "
-            "Refusing to publish a non-gold test set."
+            "Refusing to publish a test set that is not manually labeled."
         )
 
     dd = DatasetDict(

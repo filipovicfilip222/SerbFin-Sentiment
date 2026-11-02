@@ -36,7 +36,7 @@ Label from the **investor / market perspective**, not from an emotional or socia
 
 ## Label source values
 
-- `human` — hand-labeled by a human annotator (required for the gold test set).
+- `human` — hand-labeled by a human annotator (required for the test set).
 - `llm-silver` — Claude Haiku auto-label (train pool only).
 - `llm-reviewed` — Claude Haiku label spot-checked and confirmed/corrected by a human.
 
