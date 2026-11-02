@@ -70,7 +70,7 @@ emotional sentiment).
 Evaluated on a 240-headline test set **manually labeled by me** (never used for training), same
 fixed prompt at zero-shot baseline / training / eval time. Full per-class breakdown and
 confusion matrices: `reports/eval.md` in the
-[GitHub repo](https://github.com/filipovicfilip222-alt/SerbFin-Sentiment).
+[GitHub repo](https://github.com/filipovicfilip222/SerbFin-Sentiment).
 
 {summary_table}
 
@@ -142,7 +142,7 @@ print(tokenizer.decode(out[0][inputs["input_ids"].shape[-1]:], skip_special_toke
 ## Reproduction
 
 ```bash
-git clone https://github.com/filipovicfilip222-alt/SerbFin-Sentiment
+git clone https://github.com/filipovicfilip222/SerbFin-Sentiment
 cd SerbFin-Sentiment && pip install -e .
 python -m src.data.split --train-val-only
 python -m src.train.qlora_train      # requires a CUDA GPU
