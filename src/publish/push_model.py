@@ -155,6 +155,7 @@ Financial-news-headline sentiment, Serbian language, investor/market framing. No
 emotional sentiment, social media text, or languages other than Serbian. The `positive`/`neutral`
 boundary is the most common source of confusion -- see the confusion matrix in `reports/eval.md`.
 Class balance in training data skews `neutral`.
+The test set was labeled by a single annotator; inter-annotator agreement was not computed.
 
 ## License
 

@@ -39,15 +39,15 @@ notebooks/        scratch only — no production logic
 
 | Phase | Status |
 |-------|--------|
-| 0 — Setup | done |
+| 0 — Setup | done (dependencies not pinned yet: `pyproject.toml` lists minimum versions only) |
 | 1 — Collect | done |
-| 2 — Label | done (240 human-labeled gold test set + silver train pool) |
+| 2 — Label | done (240-headline test set manually labeled by me, single annotator, κ not computed + silver train pool) |
 | 3 — Train | done — QLoRA adapter trained on RunPod (RTX A5000), 3 epochs, ~84s |
 | 4 — Eval | **done — success criterion met** (fine-tuned beats both baselines) |
 | 5 — Publish | done — [dataset](https://huggingface.co/datasets/filipovicfilip222/serbfin-sentiment) + [model](https://huggingface.co/filipovicfilip222/serbfin-sentiment-llama-3.2-3b) on HF Hub |
 | 6 — Writeup | pending |
 
-### Results (Phase 4) — SUCCESS
+### Results (Phase 4)
 
 All three scored on the same 240-headline test set, manually labeled by me:
 
@@ -112,6 +112,12 @@ python -m src.publish.push_model
 Both are CPU-only (no GPU needed) -- they read local files and upload. `push_model` writes a
 generated model card straight into `outputs/serbfin-llama-3.2-3b/final_adapter/README.md` before
 uploading, pulling the eval summary table live from `reports/eval.md`.
+
+## Limitations
+
+- The test set was labeled by a single annotator (me); inter-annotator agreement was not computed.
+- Train and validation labels are LLM silver labels (Claude Haiku), not manual labels.
+- 240 test headlines is a small sample, so the macro-F1 differences carry real uncertainty.
 
 ## License
 
