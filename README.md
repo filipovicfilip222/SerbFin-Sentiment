@@ -22,17 +22,16 @@ to boost margins" is `positive` from a market viewpoint. See `data/ANNOTATION.md
 configs/          LoRA + training hyperparams (lora.yaml, train.yaml)
 data/
   raw/            collected headlines (gitignored)
-  interim/        silver-labeled pool
+  interim/        silver-labeled pool (gitignored)
   processed/      final train/val/test splits
 src/
   collect/        source ingestion
   label/          silver labeling (LLM) + review tooling
   data/           schema, split, stats
   train/          QLoRA training (qlora_train.py)
-  eval/           metrics, baselines, run_eval
+  eval/           metrics, baselines, finetuned_eval
   publish/        push dataset + model to HF Hub
-reports/          eval.md, confusion matrices
-notebooks/        scratch only — no production logic
+reports/          eval.md (per-class scores + confusion matrices), predictions_*.jsonl
 ```
 
 ## Phases
