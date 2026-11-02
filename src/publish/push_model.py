@@ -65,8 +65,6 @@ for 3-class **Serbian financial sentiment** classification (`positive` / `negati
 on short financial news headlines, judged from an **investor / market perspective** (not
 emotional sentiment).
 
-First publicly available Serbian-language financial sentiment model.
-
 ## Results
 
 Evaluated on a 240-headline **human-labeled** gold test set (never used for training), same

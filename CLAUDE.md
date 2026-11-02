@@ -1,6 +1,6 @@
 # SerbFin-Sentiment — Agent Context
 
-First publicly available Serbian financial sentiment model.
+Serbian-language financial sentiment model (Llama 3.2 3B, QLoRA).
 Base: Llama 3.2 3B Instruct · QLoRA 4-bit NF4 · PyTorch/PEFT/TRL/HF.
 Full detail: see SPEC.md (source of truth).
 

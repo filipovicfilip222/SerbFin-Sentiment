@@ -1,6 +1,6 @@
 # SerbFin-Sentiment
 
-**First publicly available Serbian-language financial sentiment model.**
+**Serbian-language financial sentiment model and dataset.**
 
 Fine-tuned Llama 3.2 3B Instruct via QLoRA (4-bit NF4) for 3-class financial sentiment
 classification (`positive` / `negative` / `neutral`) on short Serbian financial headlines.

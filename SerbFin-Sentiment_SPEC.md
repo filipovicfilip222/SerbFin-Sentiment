@@ -1,5 +1,10 @@
 # SerbFin-Sentiment — Project Specification
 
+> **Note:** this is the original design spec, written before the work started, and is kept as a
+> record of the plan. Some of its goals were not met or not verified (for example double
+> annotation with Cohen's κ ≥ 0.6, and pinned dependencies). See [README.md](README.md) for what
+> was actually done and its limitations.
+
 > Fine-tuned Serbian financial sentiment classification model.
 > Base: **Llama 3.2 3B Instruct** · Method: **QLoRA (4-bit NF4)** · Stack: **PyTorch · PEFT · TRL · HuggingFace**
 
@@ -9,7 +14,7 @@ This is the single source of truth for the project. It is written for a handoff 
 
 ## 1. Goal & positioning
 
-Build the **first publicly available Serbian-language financial sentiment model**, published on the HuggingFace Hub together with its labeled dataset.
+Build a **Serbian-language financial sentiment model**, published on the HuggingFace Hub together with its labeled dataset.
 
 The headline claim for the CV / model card is:
 
@@ -312,7 +317,7 @@ anthropic          # for silver labeling
 ```markdown
 # SerbFin-Sentiment — Agent Context
 
-First publicly available Serbian financial sentiment model.
+Serbian-language financial sentiment model (Llama 3.2 3B, QLoRA).
 Base: Llama 3.2 3B Instruct · QLoRA 4-bit NF4 · PyTorch/PEFT/TRL/HF.
 Full detail: see SPEC.md (source of truth).
 

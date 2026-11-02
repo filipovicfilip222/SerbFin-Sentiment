@@ -82,7 +82,7 @@ pretty_name: SerbFin-Sentiment
 
 # SerbFin-Sentiment
 
-First publicly available **Serbian-language financial sentiment** dataset. Short financial
+A **Serbian-language financial sentiment** dataset. Short financial
 news headlines / lead sentences from Serbian business news sites, labeled for 3-class sentiment
 from an **investor / market perspective** (not emotional sentiment).
 
